@@ -3,4 +3,4 @@ project(TP6_RFM C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(TP6_RFM main.c)
+add_executable(TP6_RFM main.c graphe/graphe.h graphe/graphe.c graphe.txt)
