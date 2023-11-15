@@ -3,9 +3,9 @@
 
 
 // Fonction pour lire un graphe depuis un fichier
-Graphe *read_graph(char *filename) {
+Graphe *read_graph(char *nomFichier) {
     Graphe *graphe = malloc(sizeof(Graphe));
-    FILE * file = fopen("graphe.txt","r");
+    FILE * file = fopen(nomFichier,"r");
 
     if (!file){
         printf("Erreur de lecture fichier\n");

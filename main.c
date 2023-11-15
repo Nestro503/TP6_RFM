@@ -3,10 +3,10 @@
 
 int main() {
     Graphe * g;
-    char nom_fichier[MAX_SIZE];
+    char nom_fichier[50];
 
-    printf("Entrer le nom du fichier du labyrinthe :");
-    gets(nom_fichier);
+    printf("Entrer le nom du fichier du labyrinthe : ");
+    scanf("%s", nom_fichier);
 
     g = read_graph(nom_fichier);
     printGraph(g);
