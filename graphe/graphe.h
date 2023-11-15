@@ -15,7 +15,7 @@
 struct Arc
 {
     int sommet; // numéro de sommet d'un arc adjacent au sommet initial
-    int valeur;
+    int capacity;
     struct Arc* arc_suivant;
 };
 
@@ -23,12 +23,9 @@ struct Arc
 typedef struct Arc* pArc;
 
 /* Structure d'un sommet*/
-struct Sommet
-{
+struct Sommet{
     struct Arc* arc;
-    int valeur;
-    char couleur;
-
+    char name;
 };
 
 /* Alias de pointeur sur un Sommet */
@@ -38,12 +35,13 @@ typedef struct Sommet* pSommet;
 typedef struct Graphe{
     int taille;
     int order;  // Ordre du graphe
-    char vertices[MAX_SIZE];  // Noms des sommets
+    char vertices[MAX_SIZE];
     int capacityMatrix[MAX_SIZE][MAX_SIZE];  // Matrice d'adjacence
     pSommet* pSommet;
 } Graphe;
 
-
+Graphe* createGraph(int ordre);
+pSommet* createEdge(pSommet* sommet,int s1,int s2);
 Graphe *read_graph(char *filename);
 void printGraph(const Graphe *graph);
 

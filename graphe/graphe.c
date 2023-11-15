@@ -1,7 +1,6 @@
 
 #include "graphe.h"
 
-
 // Fonction pour lire un graphe depuis un fichier
 Graphe *read_graph(char *nomFichier) {
     Graphe *graphe = malloc(sizeof(Graphe));
@@ -14,6 +13,8 @@ Graphe *read_graph(char *nomFichier) {
 
     fscanf(file, "%d", &graphe->order);  // Lecture de l'ordre du graphe
 
+    graphe = createGraph(graphe->order); // créer le graphe d'ordre sommets
+
     // Lecture des noms des sommets
     for (int i = 0; i < graphe->order; i++) {
         fscanf(file, " %c", &graphe->vertices[i]);
@@ -23,8 +24,14 @@ Graphe *read_graph(char *nomFichier) {
     for (int i = 0; i < graphe->order; i++) {
         for (int j = 0; j < graphe->order; j++) {
             fscanf(file, "%d", &graphe->capacityMatrix[i][j]);
+            if (graphe->capacityMatrix[i][j] != 0){
+                graphe->pSommet = createEdge(graphe->pSommet, graphe->vertices[i], graphe->vertices[j]);
+                //graphe->pSommet->capacity = graphe->capacityMatrix[i][j];
+                graphe->taille++;
+            }
         }
     }
+
 
     fclose(file);
     return graphe;
@@ -48,3 +55,53 @@ void printGraph(const Graphe *graph) {
         printf("\n");
     }
 }
+
+
+// Ajouter l'arête entre les sommets s1 et s2 du graphe
+pSommet* createEdge(pSommet* sommet,int s1,int s2){
+    if(sommet[s1]->arc==NULL){
+        pArc Newarc=(pArc)malloc(sizeof(struct Arc));
+        Newarc->sommet=s2;
+        Newarc->arc_suivant=NULL;
+        sommet[s1]->arc=Newarc;
+        return sommet;
+    }
+
+    else{
+        pArc temp=sommet[s1]->arc;
+        while( !(temp->arc_suivant==NULL))
+        {
+            temp=temp->arc_suivant;
+        }
+        pArc Newarc=(pArc)malloc(sizeof(struct Arc));
+        Newarc->sommet=s2;
+        Newarc->arc_suivant=NULL;
+
+        if(temp->sommet>s2)
+        {
+            Newarc->arc_suivant=temp->arc_suivant;
+            Newarc->sommet=temp->sommet;
+            temp->sommet=s2;
+            temp->arc_suivant=Newarc;
+            return sommet;
+        }
+
+        temp->arc_suivant=Newarc;
+        return sommet;
+    }
+}
+
+// créer le graphe
+Graphe* createGraph(int ordre){
+    Graphe * Newgraphe=(Graphe*)malloc(sizeof(Graphe));
+    Newgraphe->pSommet = (pSommet*)malloc(ordre*sizeof(pSommet));
+
+    for(int i=0; i<ordre; i++){
+        Newgraphe->pSommet[i]=(pSommet)malloc(sizeof(struct Sommet));
+        Newgraphe->pSommet[i]->name = '0';
+        Newgraphe->pSommet[i]->arc = NULL;
+    }
+    return Newgraphe;
+}
+
+
