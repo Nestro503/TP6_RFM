@@ -3,7 +3,8 @@
 
 // Fonction pour lire un graphe depuis un fichier
 Graphe *read_graph(char *nomFichier) {
-    Graphe *graphe = malloc(sizeof(Graphe));
+    Graphe *graphe;
+    int ordre;
     FILE * file = fopen(nomFichier,"r");
 
     if (!file){
@@ -11,9 +12,10 @@ Graphe *read_graph(char *nomFichier) {
         exit(-1);
     }
 
-    fscanf(file, "%d", &graphe->order);  // Lecture de l'ordre du graphe
+    fscanf(file, "%d", &ordre);  // Lecture de l'ordre du graphe
 
-    graphe = createGraph(graphe->order); // créer le graphe d'ordre sommets
+    graphe = createGraph(ordre); // créer le graphe d'ordre sommets
+    graphe->order = ordre;
 
     // Lecture des noms des sommets
     for (int i = 0; i < graphe->order; i++) {
@@ -25,13 +27,12 @@ Graphe *read_graph(char *nomFichier) {
         for (int j = 0; j < graphe->order; j++) {
             fscanf(file, "%d", &graphe->capacityMatrix[i][j]);
             if (graphe->capacityMatrix[i][j] != 0){
-                graphe->pSommet = createEdge(graphe->pSommet, graphe->vertices[i], graphe->vertices[j]);
+                graphe->pSommet = createEdge(graphe->pSommet, i, j);
                 //graphe->pSommet->capacity = graphe->capacityMatrix[i][j];
                 graphe->taille++;
             }
         }
     }
-
 
     fclose(file);
     return graphe;
@@ -69,7 +70,7 @@ pSommet* createEdge(pSommet* sommet,int s1,int s2){
 
     else{
         pArc temp=sommet[s1]->arc;
-        while( !(temp->arc_suivant==NULL))
+        while(temp->arc_suivant !=NULL)
         {
             temp=temp->arc_suivant;
         }

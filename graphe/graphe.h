@@ -14,8 +14,9 @@
 /* Structure d'un arc*/
 struct Arc
 {
-    int sommet; // numéro de sommet d'un arc adjacent au sommet initial
+    char sommet; // numéro de sommet d'un arc adjacent au sommet initial
     int capacity;
+    int flot;
     struct Arc* arc_suivant;
 };
 
