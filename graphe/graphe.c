@@ -21,13 +21,15 @@ Graphe *read_graph(char *nomFichier) {
     for (int i = 0; i < graphe->order; i++) {
         fscanf(file, " %c", &graphe->vertices[i]);
     }
+    graphe->source = 0;
+    graphe->puit = graphe->order-1;
 
     // Lecture de la matrice d'adjacence
     for (int i = 0; i < graphe->order; i++) {
         for (int j = 0; j < graphe->order; j++) {
             fscanf(file, "%d", &graphe->capacityMatrix[i][j]);
             if (graphe->capacityMatrix[i][j] != 0){
-                graphe->pSommet = createEdge(graphe->pSommet, i, j);
+                graphe->pSommet = createEdge(graphe->pSommet, i, j, graphe->capacityMatrix[i][j]);
                 //graphe->pSommet->capacity = graphe->capacityMatrix[i][j];
                 graphe->taille++;
             }
@@ -38,32 +40,16 @@ Graphe *read_graph(char *nomFichier) {
     return graphe;
 }
 
-// Fonction pour afficher le graphe
-void printGraph(const Graphe *graph) {
-    printf("Ordre du graphe: %d\n", graph->order);
 
-    printf("Noms des sommets: ");
-    for (int i = 0; i < graph->order; i++) {
-        printf("%c ", graph->vertices[i]);
-    }
-    printf("\n");
-
-    printf("Matrice d'adjacence:\n");
-    for (int i = 0; i < graph->order; i++) {
-        for (int j = 0; j < graph->order; j++) {
-            printf("%d ", graph->capacityMatrix[i][j]);
-        }
-        printf("\n");
-    }
-}
 
 
 // Ajouter l'arête entre les sommets s1 et s2 du graphe
-pSommet* createEdge(pSommet* sommet,int s1,int s2){
+pSommet* createEdge(pSommet* sommet,int s1,int s2, int poids){
     if(sommet[s1]->arc==NULL){
         pArc Newarc=(pArc)malloc(sizeof(struct Arc));
         Newarc->sommet=s2;
         Newarc->arc_suivant=NULL;
+        Newarc->capacity = poids;
         sommet[s1]->arc=Newarc;
         return sommet;
     }
@@ -76,12 +62,14 @@ pSommet* createEdge(pSommet* sommet,int s1,int s2){
         }
         pArc Newarc=(pArc)malloc(sizeof(struct Arc));
         Newarc->sommet=s2;
+        Newarc->capacity = poids;
         Newarc->arc_suivant=NULL;
 
         if(temp->sommet>s2)
         {
             Newarc->arc_suivant=temp->arc_suivant;
             Newarc->sommet=temp->sommet;
+            Newarc->capacity = poids;
             temp->sommet=s2;
             temp->arc_suivant=Newarc;
             return sommet;
@@ -106,3 +94,23 @@ Graphe* createGraph(int ordre){
 }
 
 
+
+// Fonction pour afficher le graphe
+void printGraph(const Graphe *graph) {
+    printf("Ordre du graphe: %d\n", graph->order);
+
+    printf("Noms des sommets: ");
+    for (int i = 0; i < graph->order; i++) {
+        printf("%c ", graph->vertices[i]);
+    }
+    printf("\n");
+
+    printf("Matrice d'adjacence:\n");
+    for (int i = 0; i < graph->order; i++) {
+        for (int j = 0; j < graph->order; j++) {
+            printf("%d ", graph->capacityMatrix[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
