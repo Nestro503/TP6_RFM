@@ -2,6 +2,7 @@
 #include "graphe.h"
 
 // Fonction pour lire un graphe depuis un fichier
+// inspiré du code donné lors du TP2
 Graphe *read_graph(char *nomFichier) {
     Graphe *graphe;
     int ordre;
